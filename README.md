@@ -53,30 +53,23 @@ This skill encodes the current best practices from React Testing Library, Kent C
 
 ### Claude Code (User-Level)
 
-Copy the `ui-tests-design` folder into your skills directory:
+Clone directly into your skills directory:
 
 ```bash
-cp -r ui-tests-design/ ~/.claude/skills/ui-tests-design
+git clone https://github.com/inprojectspl/ui-tests-design.git ~/.claude/skills/ui-tests-design
 ```
 
 The skill will be available across all your projects.
 
 ### Claude Code (Project-Level)
 
-Copy the `ui-tests-design` folder into your project's skill directory:
+Clone into your project's skill directory:
 
 ```bash
-cp -r ui-tests-design/ .claude/skills/ui-tests-design
+git clone https://github.com/inprojectspl/ui-tests-design.git .claude/skills/ui-tests-design
 ```
 
-Commit it to Git so your team shares the same testing guidance.
-
-### Claude.ai (Web)
-
-1. Zip the `ui-tests-design` folder
-2. Go to **Customize > Skills**
-3. Click **Upload a skill**
-4. Upload the zip file
+Commit the `.claude/skills/ui-tests-design` directory to Git so your team shares the same testing guidance.
 
 ## Usage
 
@@ -136,12 +129,14 @@ The skill follows a structured process:
 ## Skill Structure
 
 ```
-ui-tests-design/
-├── SKILL.md                          # Core instructions and workflow
-└── references/
-    ├── anti-patterns.md              # Catalog of common testing mistakes
-    ├── query-guide.md                # Query selection priority and examples
-    └── testing-recipes.md            # Ready-to-use patterns for common scenarios
+ui-tests-design/               # Repository root = skill folder
+├── SKILL.md                   # Core instructions and workflow
+├── references/
+│   ├── anti-patterns.md       # Catalog of common testing mistakes
+│   ├── query-guide.md         # Query selection priority and examples
+│   └── testing-recipes.md     # Ready-to-use patterns for common scenarios
+├── README.md                  # This file (not loaded by Claude)
+└── CHANGELOG.md               # Version history (not loaded by Claude)
 ```
 
 - **SKILL.md** contains the main workflow, decision trees, and verification checklist
