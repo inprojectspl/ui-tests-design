@@ -8,7 +8,7 @@ Tests focus on observable behavior and real component integration, with controll
 
 ### AI Marketplace
 
-The plugin is distributed through `inprojects-ai-tools` from this repository's `plugin/` directory, pinned to tag `v1.1.0`. After the tag and marketplace update are published, install it in Claude Code:
+The plugin is distributed through `inprojects-ai-tools` from this repository's `plugin/` directory, pinned to tag `v1.1.1`. After the tag and marketplace update are published, install it in Claude Code:
 
 ```text
 /plugin install ui-tests-design@inprojects-ai-tools
@@ -22,7 +22,7 @@ Keep a source checkout outside the application's skills directory, then export o
 
 ```sh
 skill_checkout=$(mktemp -d)
-git clone --branch v1.1.0 --depth 1 https://github.com/inprojectspl/ui-tests-design.git "$skill_checkout/source"
+git clone --branch v1.1.1 --depth 1 https://github.com/inprojectspl/ui-tests-design.git "$skill_checkout/source"
 mkdir -p .claude/skills/ui-tests-design
 git -C "$skill_checkout/source" archive HEAD SKILL.md references | tar -x -C .claude/skills/ui-tests-design
 ```
@@ -35,7 +35,7 @@ If the team deliberately uses submodules, configure one explicitly instead of co
 
 ```sh
 git submodule add https://github.com/inprojectspl/ui-tests-design.git .claude/skills/ui-tests-design
-git -C .claude/skills/ui-tests-design checkout v1.1.0
+git -C .claude/skills/ui-tests-design checkout v1.1.1
 git add .gitmodules .claude/skills/ui-tests-design
 ```
 

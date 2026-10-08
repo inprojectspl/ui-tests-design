@@ -1,6 +1,6 @@
 ---
 name: ui-tests-design
-description: Plan, review, write, and repair React component, hook, and utility tests with TypeScript, Vitest, and React Testing Library. Use for frontend test coverage and flaky component tests; excludes backend, E2E, and visual regression testing.
+description: Plan, review, write and repair React component, hook and utility tests with TypeScript, Vitest and React Testing Library. Use when the user asks to add or improve frontend tests, cover a React component or hook, fix flaky component tests, or review test files for brittle queries, mocks or waits. This is the test-design policy for React code; the vitest skill only documents the runner API. Also use for Polish requests such as "napisz testy komponentu", "testy frontendu", "popraw testy Reacta" or "niestabilne testy". Excludes backend, E2E and visual regression testing.
 ---
 
 # UI Tests Design
@@ -30,6 +30,8 @@ Match the requested mode and scope. Read the existing tests and configuration be
 - **Implement:** make the authorized changes, run the narrowest relevant project test command and report its exact result. Distinguish tests, typecheck and lint; name skipped checks and blockers.
 
 Check installed React, Vitest, Testing Library and user-event versions, DOM environment, setup files, cleanup registration, helpers and test conventions. Adapt examples without upgrading dependencies or restructuring the project merely to match this skill.
+
+This skill decides what to test and how. For Vitest runner details (configuration, `vi` utilities, differences between major versions) consult the `vitest` skill when it is installed.
 
 ### Step 1: Analyze the Code Under Test
 
