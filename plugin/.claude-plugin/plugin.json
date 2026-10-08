@@ -1,0 +1,13 @@
+{
+  "name": "ui-tests-design",
+  "version": "1.1.0",
+  "description": "Plan, review and implement React tests with Vitest and Testing Library.",
+  "author": {
+    "name": "inprojects AI tools"
+  },
+  "repository": "https://github.com/inprojectspl/ui-tests-design",
+  "skills": [
+    "./skills/"
+  ],
+  "license": "MIT"
+}

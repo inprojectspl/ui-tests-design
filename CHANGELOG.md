@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [1.1.0] - 2026-10-08
+
+### Added
+
+- Added executable async, timer, failure-cleanup and globals-mode checks with versioned dependencies and agent evaluation cases.
+- Added generated Claude Code, Codex and portable plugin packages for marketplace distribution.
+
+### Changed
+
+- Separated plan, review and implementation outputs, required independent expectations and actual execution evidence, and made style defaults proportional to the project.
+- Documented archive-based installation, submodule updates and installed-version checks.
+
+### Fixed
+
+- Corrected appearance versus state waiting, immediate dismissal, conditional cleanup registration and restoration after failed assertions.
+- Wrapped manual React timer updates in awaited act and documented the reproduced user-event/fake-timer incompatibility with separate interaction and timer examples.
+
 ## [1.0.0] - 2026-03-27
 
 ### Added
@@ -31,3 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Testing absence of elements
   - Multiple providers (composite wrapper)
 - README with installation instructions, usage examples, and reference links
+
+[Unreleased]: https://github.com/inprojectspl/ui-tests-design/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/inprojectspl/ui-tests-design/releases/tag/v1.1.0
+[1.0.0]: https://github.com/inprojectspl/ui-tests-design/tree/5ca0dec0283b5d60d793b436af2b8756ae6b6a06
