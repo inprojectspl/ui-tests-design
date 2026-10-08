@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-10-08
+
+### Changed
+
+- Rewrote the skill description with concrete trigger situations and Polish request phrases, so agents that route by description alone, such as Claude Code, select the skill reliably.
+- Separated this test-design policy from the `vitest` runner API skill in both directions.
+
 ## [1.1.0] - 2026-10-08
 
 ### Added
@@ -51,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Multiple providers (composite wrapper)
 - README with installation instructions, usage examples, and reference links
 
-[Unreleased]: https://github.com/inprojectspl/ui-tests-design/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/inprojectspl/ui-tests-design/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/inprojectspl/ui-tests-design/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/inprojectspl/ui-tests-design/releases/tag/v1.1.0
 [1.0.0]: https://github.com/inprojectspl/ui-tests-design/tree/5ca0dec0283b5d60d793b436af2b8756ae6b6a06
