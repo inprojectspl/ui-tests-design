@@ -1,183 +1,68 @@
 # ui-tests-design
 
-A Claude Skill that plans, reviews, and implements high-quality frontend tests for React applications using **Vitest**, **React Testing Library**, and **TypeScript**.
+Plan, review and implement React component, hook and utility tests using TypeScript, Vitest and React Testing Library.
 
-## What Problem Does This Solve?
-
-Writing good frontend tests is harder than it looks. Most test suites suffer from one or more of these issues:
-
-- **Brittle tests** that break on every refactor because they test implementation details
-- **False confidence** from tests that pass even when the UI is broken
-- **Wrong query choices** that make tests fragile and inaccessible
-- **Over-mocking** that eliminates integration confidence
-- **Snapshot abuse** that generates noise instead of signal
-- **Flaky async tests** caused by misuse of `waitFor`, `act()`, or timing issues
-
-This skill encodes the current best practices from React Testing Library, Kent C. Dodds' Testing Trophy philosophy, and modern Vitest patterns into a structured workflow that consistently produces robust, maintainable tests.
-
-## Who Is This For?
-
-- Developers working on React + Vite + TypeScript projects
-- Teams that want consistent, high-quality test output from Claude
-- Anyone writing or reviewing component tests, hook tests, or utility tests
-- Projects using Vitest as their test runner and React Testing Library for component testing
-
-## Capabilities
-
-### Test Planning
-- Analyzes source code to identify what needs testing
-- Categorizes test cases by user-visible behavior
-- Produces structured test plans (Arrange/Act/Assert)
-- Identifies edge cases, error states, and boundary conditions
-
-### Test Implementation
-- Generates tests following the Testing Trophy philosophy
-- Uses accessible queries (`getByRole` first, `getByTestId` last)
-- Applies `userEvent` for realistic interaction simulation
-- Handles async patterns correctly (`findBy*` over `waitFor` + `getBy*`)
-- Provides factory setup functions instead of brittle `beforeEach` chains
-- Includes proper provider wrapping for Context, Router, and stores
-
-### Test Review
-- Evaluates existing tests against a comprehensive anti-pattern catalog
-- Reports issues by severity (CRITICAL / WARNING / INFO)
-- Checks for implementation detail testing, query misuse, and over-mocking
-- Verifies tests would survive a refactor
-
-### Mocking Strategy
-- Decision tree for when to mock vs. when to render real components
-- Patterns for API mocking, timer mocking, and browser API mocking
-- Guidance on MSW vs. `vi.mock()` tradeoffs
+Tests focus on observable behavior and real component integration, with controlled external boundaries. The skill distinguishes element appearance from state changes, uses conditional cleanup registration, and requires test results rather than checklist-only claims. It adapts to the project's versions and conventions. E2E, visual regression and backend testing are outside its scope.
 
 ## Installation
 
-### Claude Code (User-Level)
+### AI Marketplace
 
-Clone directly into your skills directory:
+The plugin is distributed through `inprojects-ai-tools` from this repository's `plugin/` directory, pinned to tag `v1.1.0`. After the tag and marketplace update are published, install it in Claude Code:
 
-```bash
-git clone https://github.com/inprojectspl/ui-tests-design.git ~/.claude/skills/ui-tests-design
+```text
+/plugin install ui-tests-design@inprojects-ai-tools
 ```
 
-The skill will be available across all your projects.
+For Codex, refresh the marketplace and select `ui-tests-design` in the plugin directory, or use the commands supported by your installed CLI. The contained skill is `ui-tests-design`. For UI design, the existing plugin selector `ui-design` is preserved.
 
-### Claude Code (Project-Level)
+### Standalone project or user installation
 
-Clone into your project's skill directory:
+Keep a source checkout outside the application's skills directory, then export only the skill files. This avoids a nested `.git` directory and excludes generated plugin copies and evaluations:
 
-```bash
-git clone https://github.com/inprojectspl/ui-tests-design.git .claude/skills/ui-tests-design
+```sh
+skill_checkout=$(mktemp -d)
+git clone --branch v1.1.0 --depth 1 https://github.com/inprojectspl/ui-tests-design.git "$skill_checkout/source"
+mkdir -p .claude/skills/ui-tests-design
+git -C "$skill_checkout/source" archive HEAD SKILL.md references | tar -x -C .claude/skills/ui-tests-design
 ```
 
-Commit the `.claude/skills/ui-tests-design` directory to Git so your team shares the same testing guidance.
+Commit that ordinary directory in the parent project. For Claude user installation replace the destination with `~/.claude/skills/ui-tests-design`. For Codex use `.agents/skills/ui-tests-design` or `~/.agents/skills/ui-tests-design`. Copy both `SKILL.md` and `references/`; copying only the entrypoint is insufficient. Existing root-level `SKILL.md` paths remain available.
 
-## Usage
+To update, review the next release, fetch/check out its tag in the source checkout, repeat the archive export and commit the resulting diff. Review removed reference files as well; archive extraction does not delete obsolete files.
 
-The skill activates automatically when you ask Claude to work with frontend tests. You can also invoke it explicitly.
+If the team deliberately uses submodules, configure one explicitly instead of committing an ordinary nested clone:
 
-### Example Prompts
-
-**Writing new tests:**
-```
-Write tests for the UserProfile component
-```
-
-```
-Add tests for the useAuth hook
+```sh
+git submodule add https://github.com/inprojectspl/ui-tests-design.git .claude/skills/ui-tests-design
+git -C .claude/skills/ui-tests-design checkout v1.1.0
+git add .gitmodules .claude/skills/ui-tests-design
 ```
 
-```
-Test the CartReducer — cover add, remove, and edge cases
-```
+Other clones need `git submodule update --init --recursive` (or `git clone --recurse-submodules`). To update, fetch/check out the new tag within the submodule and commit the new gitlink in the parent. A submodule includes authoring/package files; prefer the archive method when only skill resources should be installed.
 
-**Planning test coverage:**
-```
-What should I test in this LoginForm component?
-```
+## Usage and results
 
-```
-Plan test cases for the checkout flow
-```
+- "Plan tests for LoginForm" returns scenarios, expectation sources and assumptions without edits.
+- "Review SearchResults tests" returns located findings and impact without unsolicited rewrites.
+- "Fix the flaky dismissal test" changes tests, runs the relevant command and reports results or blockers.
 
-**Reviewing existing tests:**
-```
-Review the tests in SearchResults.test.tsx — are they following best practices?
-```
+`userEvent` is the default for supported interactions. `waitFor` remains correct for a button becoming enabled. Hooks, nested groups and `within()` are valid when they improve clarity and isolation; no universal coverage percentage is prescribed.
 
-```
-This test file feels brittle. What should I fix?
+## Maintenance and verification
+
+`SKILL.md` and `references/` at the repository root are the authoring sources. `plugin/.claude-plugin/plugin.json` holds the release metadata. The generated `plugin/skills/`, portable `plugin/plugin.json` and compatibility `.codex-plugin/plugin.json` are committed so installing a tag requires no build step:
+
+```sh
+python3 scripts/package_plugin.py
+python3 scripts/package_plugin.py --check
+claude plugin validate plugin
 ```
 
-**Fixing problems:**
-```
-Fix the flaky tests in Dashboard.test.tsx
-```
+This preserves standalone source paths while providing conventional plugin packaging for both runtimes. Generated files must not be edited directly. No MCP server, hook, extra permission or explicit-only invocation policy is required.
 
-```
-These tests break every time I refactor. Help me make them resilient.
-```
-
-### Workflow
-
-The skill follows a structured process:
-
-1. **Analyze** — Read the source code, identify behavior, inputs, outputs, edge cases
-2. **Plan** — Define test cases organized by user-visible behavior
-3. **Implement** — Write tests following all rules (accessible queries, userEvent, factory setup, minimal mocking)
-4. **Verify** — Run the mandatory quality checklist against anti-patterns
-
-## Skill Structure
-
-```
-ui-tests-design/               # Repository root = skill folder
-├── SKILL.md                   # Core instructions and workflow
-├── references/
-│   ├── anti-patterns.md       # Catalog of common testing mistakes
-│   ├── query-guide.md         # Query selection priority and examples
-│   └── testing-recipes.md     # Ready-to-use patterns for common scenarios
-├── README.md                  # This file (not loaded by Claude)
-└── CHANGELOG.md               # Version history (not loaded by Claude)
-```
-
-- **SKILL.md** contains the main workflow, decision trees, and verification checklist
-- **references/** contains detailed documentation loaded on demand (progressive disclosure)
-
-## Core Principles
-
-This skill is built on these non-negotiable principles:
-
-1. **"The more your tests resemble the way your software is used, the more confidence they can give you."** — React Testing Library guiding principle
-2. **"Write tests. Not too many. Mostly integration."** — Kent C. Dodds
-3. **Test behavior, not implementation.** If a refactor preserves behavior, tests must not break.
-4. **Accessible queries first.** `getByRole` is the default; `getByTestId` is the last resort.
-5. **Real interactions.** `userEvent` simulates what users actually do; `fireEvent` does not.
-6. **Minimal mocking.** Mock only external boundaries (network, timers, browser APIs). Render real components.
-
-## Non-Goals
-
-This skill does **not** handle:
-
-- End-to-end testing (Playwright, Cypress)
-- Visual regression testing
-- Performance testing or benchmarking
-- Non-React frameworks (Vue, Svelte, Angular)
-- Backend or API testing
-- Snapshot testing (actively discouraged for components)
-
-## References
-
-The testing guidance in this skill is synthesized from:
-
-- [React Testing Library documentation](https://testing-library.com/docs/react-testing-library/intro)
-- [Testing Library Guiding Principles](https://testing-library.com/docs/guiding-principles)
-- [Common Mistakes with React Testing Library](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library) by Kent C. Dodds
-- [Testing Implementation Details](https://kentcdodds.com/blog/testing-implementation-details) by Kent C. Dodds
-- [Write Tests. Not Too Many. Mostly Integration.](https://kentcdodds.com/blog/write-tests) by Kent C. Dodds
-- [Avoid Nesting When You're Testing](https://kentcdodds.com/blog/avoid-nesting-when-youre-testing) by Kent C. Dodds
-- [Making Your UI Tests Resilient to Change](https://kentcdodds.com/blog/making-your-ui-tests-resilient-to-change) by Kent C. Dodds
-- [Vitest Documentation](https://vitest.dev/)
-- [user-event Documentation](https://testing-library.com/docs/user-event/intro)
+See [evaluation record](evals/README.md) for audit decisions, executable examples, exact versions and limitations. Example execution and agent behavioral evaluation are separate. See [CHANGELOG](CHANGELOG.md) for releases.
 
 ## License
 
-MIT
+MIT.
